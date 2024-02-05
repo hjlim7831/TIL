@@ -1,4 +1,3 @@
-
 ### MobX란?
 - Redux와 또 다른 상태 관리 라이브러리
 - Component와 State를 연결하는 보일러플레이트 코드들을 데코레이터 제공으로 깔끔히 해결
@@ -15,7 +14,6 @@
     - action : state를 수정하는 메서드를 표시
     - computed : state로부터 새로운 사실을 도출하고, 그 결과값을 캐시하는 getter
 
-		
 
 
 
