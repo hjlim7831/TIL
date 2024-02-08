@@ -62,6 +62,21 @@ Why?
 
 <br>
 
+### MobX 기본 원칙
+- action이 state를 변경하는 단방향 데이터 흐름을 사용 <br>
+-> 영향을 받는 모든 view를 업데이트함
+
+1) state가 변경되면 모든 derivation이 자동으로, 원자 단위로 업데이트 됨 <br>
+-> 중간 값을 관찰 불가
+2) 모든 derivation은 동기식으로 업데이트됨
+    - action이 state를 변경한 직후 computed 값을 안전하게 검사 가능
+3) computed 값은 느리게 업데이트 됨
+    - 자주 사용되지 않는 computed 값은 부수효과(I/O)에 필요할 때까지 업데이트 되지 않음
+    - 만약 view가 계산된 값을 사용하지 않으면, 가비지가 자동으로 수집됨
+    - 모든 computed 값은 순수해야 하며, state를 바꾸면 안됨
+
+<br>
+
 ##### 참고자료
 - [React에서 Mobx 경험기(Redux와 비교기)](https://techblog.woowahan.com/2599/)
 - [MobX의 장점과 기본 원칙](https://medium.com/hcleedev/web-mobx의-장점과-기본-원칙-40a36c1cf634)
