@@ -77,6 +77,21 @@ Why?
 
 <br>
 
+### MobX Core 개념
+- Observable : State의 변화를 감시하는 역할
+    - state를 저장하는 추적 가능한 필드임을 의미
+- Action : State를 수정하는 메서드 <br>
+ex) 카운터 예제에서 숫자를 증가/감소시키는 등의 액션이 존재
+- Computed : state의 변화로 인해 계산된 값
+    - 일종의 캐싱
+    - computed 내부에서 사용하는 state가 변경되었을 때만 새로 계산해 계산 값을 저장해 놓고 사용
+    - 만약 computed 내부 state가 변경되지 않았다면, 기존에 계산해 놨던 캐싱 값을 그대로 다시 사용
+- Reaction : observable state를 변경하면 그에 따른 파생 값(computed)이 계산됨
+    - 만약 이 파생 값들을 사용하고 있는 곳이 있다면, 거기도 자동 변경되어야 함
+    - 파생 값을 사용하는 컴포넌트를 다시 렌더링하거나, 파생 값을 로그로 남기거나 하는 작업들이 Reaction
+
+<br>
+
 ##### 참고자료
 - [React에서 Mobx 경험기(Redux와 비교기)](https://techblog.woowahan.com/2599/)
 - [MobX의 장점과 기본 원칙](https://medium.com/hcleedev/web-mobx의-장점과-기본-원칙-40a36c1cf634)
