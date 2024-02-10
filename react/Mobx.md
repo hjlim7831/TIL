@@ -92,6 +92,33 @@ ex) 카운터 예제에서 숫자를 증가/감소시키는 등의 액션이 존
 
 <br>
 
+### MobX에서 구분되는 3가지 개념
+1) 상태 (state) : 앱을 구동하는 데이터
+- 값을 보유하고 있는 스프레드시트 셀과 같음
+- 시간이 지남에 따라 변경하려는 모든 속성을 MobX가 추적할 수 있도록 observable로 표시해야 함
+- observable을 사용하는 것은 객체의 속성을 스프레드시트 셀로 바꾸는 것과 같음
+
+2) 동작 (action) : state를 변경하는 코드 조각 <br>
+ex) 사용자 이벤트, 백엔드 데이터 푸시, 예약된 이벤트 등
+- 스프레드시트 셀에 새 값을 입력하는 사용자와 같음
+- observable을 변경하는 코드는 action으로 표시하는 것이 좋음
+- action을 사용하면 코드를 구조화하는 데 도움을 줄 수 있음
+- 의도하지 않은 state 변경도 방지
+
+3) 파생 (derivation) : state에서 더 이상의 상호작용 없이 파생될 수 있는 모든 것 <br>
+ex) 사용자 인터페이스, 남은 todos 수와 같은 파생 데이터, 백엔드 api 요청
+- 두 종류의 파생 값이 존재 <br>
+    i. computed : 현재의 observable state에서 순수 함수를 사용해 파생될 수 있는 값 <br>
+        - js getter 함수를 사용하면 됨 <br>
+        - 스프레드시트 자동 저장처럼, 자동으로 업데이트됨 <br>
+        - 필요할 때 (무언가 결과에 영향을 미칠 수 있을 때)만 업데이트 됨 <br>
+    ii. reaction : state가 변경될 때 자동으로 발생해야 하는 부수효과 (side effect) <br>
+        - 명령형 프로그래밍과 반응형 프로그래밍 사이를 연결해주는 다리 역할 <br>
+        - state의 변화나 computed 값의 변화를 볼 수 있으려면, GUI의 일부를 다시 그리는 reaction이 필요 <br>
+        - computed 값과 유사하지만, 정보 생성 대신 콘솔 출력, 네트워크 요청, DOM 패치 적용을 위해 React 컴포넌트 트리를 점진적으로 업데이트하는 등의 부수효과를 생성
+
+<br>
+
 ##### 참고자료
 - [React에서 Mobx 경험기(Redux와 비교기)](https://techblog.woowahan.com/2599/)
 - [MobX의 장점과 기본 원칙](https://medium.com/hcleedev/web-mobx의-장점과-기본-원칙-40a36c1cf634)
