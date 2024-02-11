@@ -119,6 +119,22 @@ ex) 사용자 인터페이스, 남은 todos 수와 같은 파생 데이터, 백�
 
 <br>
 
+### 리액트에 observer 적용하기 : observer HOC 사용
+- React를 사용하는 경우 설치 중에 선택한 바인딩 패키지에서 observer 함수를 이용해 컴포넌트를 감싸서 반응형으로 만들 수 있음 (ex. mobx-react의 observer 혹은 Observer)
+    - HOC : 리액트 컴포넌트를 argument로 받아, 새로운 리액트 컴포넌트를 리턴하는 함수
+
+<br>
+
+- observer는 리액트 컴포넌트를 렌더링하는 데이터의 derivation으로 변환함
+- MobX에서는 필요할 때마다 컴포넌트가 다시 렌더링 되며, 그 이상은 렌더링 되지 않음
+- 위 예시에서 onClick 핸들러로 toggle 액션을 사용하면, 필요한 TodoView 컴포넌트를 강제로 리렌더링함
+- TodoListView 컴포넌트의 경우, 완료되지 않은 작업의 수 (unfinishedTodoCount)가 변경된 경우에만 다시 렌더링됨
+- Observer를 통해 감싸줄 수도 있음
+
+<br>
+
+
+
 ##### 참고자료
 - [React에서 Mobx 경험기(Redux와 비교기)](https://techblog.woowahan.com/2599/)
 - [MobX의 장점과 기본 원칙](https://medium.com/hcleedev/web-mobx의-장점과-기본-원칙-40a36c1cf634)
