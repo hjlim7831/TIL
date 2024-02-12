@@ -133,7 +133,21 @@ ex) 사용자 인터페이스, 남은 todos 수와 같은 파생 데이터, 백�
 
 <br>
 
+### 리액트와 MobX 같이 사용하기
+- MobX는 React와 독립적으로 작동하지만, 일반적으로 React와 함께 사용됨
+- 위에서 설명한 React 컴포넌트를 감싸는 observer HOC 참고하기
+- Observer HOC는 렌더링 중에 사용되는 모든 observable에 React 컴포넌트들을 자동으로 구독 <br>
+-> 관련 observable이 변경되면 컴포넌트들이 자동으로 다시 렌더링 됨
+- 또한, 관련된 변경사항이 없을 때는 컴포넌트가 다시 렌더링 되지 않음 <br>
+-> 컴포넌트로부터 접근할 수는 있지만, 실제로 읽지 않는 observable은 다시 렌더링 되지 않음 <br>
+-> 따라서 위 로직에 따라 MobX는 리액트 앱을 최적화 시키고, 과도한 렌더링을 방지 가능
+- React Context를 사용해 외부 state 사용 가능
+    - React Context : context는 컴포넌트 안에서 전역적으로 데이터를 공유하도록 나온 개념 <br>
+    그런 데이터는 로그인 데이터, 웹 내 사용자가 쓰는 설정파일, 테마, 언어 등등 다양하게 컴포넌트 간 공유되어야 할 데이터로 사용되면 좋음
 
+
+
+<br>
 
 ##### 참고자료
 - [React에서 Mobx 경험기(Redux와 비교기)](https://techblog.woowahan.com/2599/)
