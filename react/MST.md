@@ -17,6 +17,10 @@
 - Tree, Nodes, Leaves, Actions, Views, Snapshots
 
 
+
+##### Snapshot vs Patch
+
+
 ##### 참고 자료
 - Mobx-state-tree 학습하기 #1 : Mobx-state-tree를 사용해 React state 관리하기 https://steemit.com/zzan/@anpigon/react-native-manage-application-state-with-mobx-state-tree-1
 - https://velog.io/@djaxornwkd12/Mobx-State-Tree에-대해-알아보자-1
