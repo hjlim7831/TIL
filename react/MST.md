@@ -20,7 +20,8 @@
 
 ##### Snapshot vs Patch
 - state로 관리되는 상태를 사진찍듯이 저장해 놓는 개념
-
+- Snapshot : state를 그대로 저장
+- Patch : 어떤 값이 변경되었는지를 저장
 
 
 ##### 참고 자료
