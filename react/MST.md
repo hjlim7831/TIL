@@ -23,6 +23,9 @@
 - Snapshot : state를 그대로 저장
 - Patch : 어떤 값이 변경되었는지를 저장
 
+##### 비동기 처리
+- flow (async), yield(await)로 처리
+
 
 ##### 참고 자료
 - Mobx-state-tree 학습하기 #1 : Mobx-state-tree를 사용해 React state 관리하기 https://steemit.com/zzan/@anpigon/react-native-manage-application-state-with-mobx-state-tree-1
