@@ -16,6 +16,7 @@
 
 - Tree, Nodes, Leaves, Actions, Views, Snapshots
 
+- 리액트에서 사용하기 위해서는 Provider로 store를 사용할 수 있도록 context를 제공해줘야 함
 
 
 ##### Snapshot vs Patch
