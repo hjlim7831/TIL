@@ -16,7 +16,6 @@
 
 - Tree, Nodes, Leaves, Actions, Views, Snapshots
 
-- 리액트에서 사용하기 위해서는 Provider로 store를 사용할 수 있도록 context를 제공해줘야 함
 
 
 ##### Snapshot vs Patch
@@ -25,7 +24,14 @@
 - Patch : 어떤 값이 변경되었는지를 저장
 
 ##### 비동기 처리
-- flow (async), yield(await)로 처리
+- flow (async 개념), yield(await 개념)로 처리
+
+
+##### 개인적인 내용 정리
+- actions : store에 변경을 가하는 method 정의
+- views : computed 개념으로 store에 저장된 값을 조회하는 method 정의
+- 리액트에서 사용하기 위해서는 Provider로 store를 사용할 수 있도록 context를 제공해줘야 함
+
 
 
 ##### 참고 자료
