@@ -31,7 +31,7 @@
 - actions : store에 변경을 가하는 method 정의
 - views : computed 개념으로 store에 저장된 값을 조회하는 method 정의
 - 리액트에서 사용하기 위해서는 Provider로 store를 사용할 수 있도록 context를 제공해줘야 함
-
+- useState, mobx 라이브러리는 따로 사용하지 않고 MST 라이브러리만 사용해도 일단은 괜찮은 듯
 
 
 ##### 참고 자료
