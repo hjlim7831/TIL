@@ -149,6 +149,7 @@ ex) 사용자 인터페이스, 남은 todos 수와 같은 파생 데이터, 백�
     - 함수형 컴포넌트만 지원
 
 - mobx-store-provider : useStore 함수 지원
+    - 각각의 store를 분리해서 관리하려면 코드가 좀 길어지기도 하는 듯
 
 
 
