@@ -31,3 +31,105 @@
         i--;
     }
     ```
+### 2. 'do...while' 반복문
+- `do..while` 문법을 사용하면 `condition`을 반복문 본문 아래로 옮길 수 있음
+    ``` javascript
+    do {
+        // 반복문 본문
+    } while (condition);
+    ```
+    - 본문이 먼저 실행되고, 조건을 확인한 후 조건이 truthy인 동안엔 본문이 계속 실행됨
+- 예시
+    ``` javascript
+    let i = 0;
+    do {
+        alert( i );
+        i++;
+    } while (i < 3);
+    ```
+- `do..while` 문법은 조건이 truthy인지 아닌지에 상관 없이, 본문을 **최소한 한 번**이라도 실행하고 싶을 때만 사용해야 함
+- 대다수의 상황에선 `do..while`보다 `while(...) {...}`이 적합함
+
+### 3. 'for' 반복문
+- `for` 반복문은 `while` 반복문보다는 복잡하지만, 가장 많이 쓰이는 반복문
+    ``` javascript
+    for (begin; condition; step) {
+        // ... 반복문 본문 ...
+    }
+    ```
+- `for`문을 구성하는 각 요소가 무엇을 의미하는지 알아보자
+- 아래 반복문을 실행하면 i가 0부터 3이 될 때까지(단, `3`은 포함하지 않음) `alert(i)`가 호출됨
+    ``` javascript
+    for (let i = 0; i < 3; i++) {
+        alert(i);
+    }
+    ```
+- `for` 문의 구성 요소
+
+| 구성 | 예시 | 설명 |
+| --- | --- | --- |
+| begin | i = 0 | 반복문에 진입할 때 단 한 번 실행됨 |
+| condition | i < 3 | 반복마다 해당 조건이 확인됨. false이면 반복문을 멈춤 |
+| body | alert(i) | condition이 truthy일 동안 계속해서 실행됨 |
+| step | i++ | 각 반복의 body가 실행된 이후에 실행됨 |
+
+- 일반적인 반복문 알고리즘
+    ```
+    begin을 실행함
+    -> (condition이 truthy이면 -> body를 실행한 후 -> step을 실행함)
+    -> (condition이 truthy이면 -> body를 실행한 후 -> step을 실행함)
+    -> (condition이 truthy이면 -> body를 실행한 후 -> step을 실행함)
+    -> ...
+    ```
+
+- 거치는 과정
+    ``` javascript
+    // for (let i = 0; i < 3; i++) alert(i)
+
+    // begin을 실행함
+    let i = 0
+    // condition이 truthy이면 → body를 실행한 후, step을 실행함
+    if (i < 3) { alert(i); i++ }
+    // condition이 truthy이면 → body를 실행한 후, step을 실행함
+    if (i < 3) { alert(i); i++ }
+    // condition이 truthy이면 → body를 실행한 후, step을 실행함
+    if (i < 3) { alert(i); i++ }
+    // i == 3이므로 반복문 종료
+    ```
+
+#### 3.1. 구성 요소 생략하기
+- `for`문의 구성 요소를 생략하는 것도 가능
+- begin, step, 모든 구성 요소 생략 가능
+    ``` javascript
+    let i = 0;
+
+    for (; i < 3; i++) {
+        alert( i ); // 0, 1, 2
+    }
+
+    i = 0;
+    for (; i < 3;) {
+        alert( i++ );
+    }
+
+    for (;;) {
+        // 끊임 없이 본문이 실행됨
+    }
+    ```
+    - 생략 시, 두 개의 세미콜론을 꼭 넣어주기
+
+### 4. 반복문 빠져나오기
+- 대개는 반복문의 조건이 falsy가 되면 반복문이 종료됨
+- 특별한 지시자인 `break`를 사용하면 언제든 원하는 때에 반복문을 빠져나올 수 있음
+- 아래 예시의 반복문은 사용자에게 일련의 숫자를 입력하도록 안내하고, 사용자가 아무런 값도 입력하지 않으면 반복문을 '종료'함
+    ``` javascript
+    let sum = 0;
+
+    while (true) {
+        let value = +prompt("숫자를 입력하세요.", "")
+        if (!value) break; // (*) : 사용자가 아무것도 입력하지 않거나, Cancel 버튼을 눌렀을 때 활성화됨
+
+        sum += value;
+    }
+    alert( "합계: " + sum);
+    ```
