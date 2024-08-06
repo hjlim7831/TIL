@@ -133,3 +133,42 @@
     }
     alert( "합계: " + sum);
     ```
+
+### 5. 다음 반복으로 넘어가기
+- `continue` : 현재 시행중인 이터레이션을 멈추고, 반복문이 다음 이터레이션을 강제로 실행시키도록 함
+- 아래 반복문은 `continue`를 사용해 홀수만 출력
+    ``` javascript
+    for (let i = 0; i < 10; i++) {
+        if (i % 2 == 0) continue;
+
+        alert(i); // 1, 3, 5, 7, 9
+    }
+    ```
+
+- '?' 오른쪽엔 break나 continue가 올 수 없음
+
+### 6. break/continue와 레이블
+- 레이블(label) : 반복문 앞에 콜론과 함께 쓰이는 식별자
+    ``` javascript
+    labelName: for (...) {
+        ...
+    }
+    ```
+    - 여러 개의 중첩 반복문을 한 번에 빠져나와야 하는 경우 사용 가능
+
+- 반복문 안에서 `break <labelName>` 문을 사용하면 레이블에 해당하는 반복문을 빠져나올 수 있음
+    ``` javascript
+    outer: for (let i = 0; i < 3; i++) {
+
+        for (let j = 0; j < 3; j++) {
+            let input = prompt(`(${i}, ${j})의 값`, "");
+
+            if (!input) break outer;
+        }
+    }
+    alert("완료!")
+    ```
+    -  continue 지시자와 함께 사용하는 것도 가능
+
+- 레이블은 마음대로 '점프'할 수 있게 해주진 않음
+    - break, continue는 반복문 안에서만 사용할 수 있고, 레이블은 반드시 break이나 continue 지시자 위에 있어야 함
