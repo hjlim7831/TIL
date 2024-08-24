@@ -165,3 +165,89 @@ describe("pow", function() {
     - 테스트 하나에서 연관이 없는 사항 두 개를 점검하고 있다면, 이 둘을 분리하는 게 좋음
 
 
+### 8. 코드 개선하기
+- 함수 개선
+    ``` javascript
+    function pow(x, n) {
+        let result = 1;
+
+        for (let i = 0; i < n; i++) {
+            result *= x;
+        }
+
+        return result;
+    }
+    ```
+- 함수가 제대로 작동하는지 확인하기 위해, 더 많은 값들을 테스트해보자.
+- 수동으로 여러 개의 it 블록을 만드는 대신, for문을 사용해 자동으로 it 블록 만들기
+    ``` javascript
+    describe("pow", function() {
+
+        function makeTest(x) {
+            let expected = x * x * x;
+            it(`${x}을/를 세 번 곱하면 ${expected}입니다.`, function() {
+                assert.equal(pow(x, 3), expected);
+            })
+        }
+
+        for (let x = 1; x <= 5; x++) {
+            makeTest(x);
+        }
+    })
+    ```
+
+### 9. 중첩 describe
+``` javascript
+describe("pow", function() {
+
+    // 새로운 테스트 '하위 그룹(subgroup)'을 정의할 때 사용
+    describe("x를 세 번 곱합니다.", function() {
+        function makeTest(x) {
+            let expected = x * x * x;
+            it(`${x}을/를 세 번 곱하면 ${expected}입니다.`, function() {
+                assert.equal(pow(x, 3), expected);
+            })
+        }
+
+        for (let x = 1; x <= 5; x++) {
+            makeTest(x);
+        }
+    })
+})
+```
+- before : (전체) 테스트가 실행되기 전에 실행됨
+- after : (전체) 테스트가 실행된 후에 실행됨
+- beforeEach : 매 it이 실행되기 전에 실행됨
+- afterEach : 매 it이 실행된 후에 실행됨
+
+### 10. 스펙 확장하기
+- n이 조건에 맞지 않을 때 함수가 NaN을 반환하는지에 대한 테스트 추가
+    ``` javascript
+    describe("pow", function() {
+
+        // ...
+    })
+
+    it("n이 음수일 때 결과는 NaN입니다.", function() {
+        assert.isNaN(pow(2, -1));
+    });
+
+    it("n이 정수가 아닐 때 결과는 NaN입니다.", function() {
+        assert.isNaN(pow(2, 1.5));
+    })
+
+    ```
+- pow 코드 개선하기
+    ``` javascript
+    function pow(x, n) {
+        if (n < 0) return NaN;
+        if (Math.round(n) != n) return NaN;
+        let result = 1;
+
+        for (let i = 0; i < n; i++) {
+            result *= x;
+        }
+
+        return result;
+    }
+    ```
