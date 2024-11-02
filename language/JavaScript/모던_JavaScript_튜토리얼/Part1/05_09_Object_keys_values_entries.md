@@ -56,3 +56,30 @@
   - 심볼형 키가 필요한 경우엔
   1. 심볼형 키만 배열 형태로 반환해주는 메서드인 `Object.getOwnPropertySymbols`를 사용하기
   2. 키 전체를 배열 형태로 반환하는 메서드인 `Reflect.ownKeys(obj)` 사용하기
+
+### 2. 객체 변환하기
+
+- 객체엔 `map`, `filter` 같은 배열 전용 메서드를 사용할 수 없음
+- 하지만 `Object.entries`와 `Object.fromEntries`를 순차적으로 적용하면 객체에도 배열 전용 메서드를 사용할 수 있음
+- 적용 방법
+
+  1. `Object.entries(obj)`를 사용해 객체의 키-값 쌍이 요소인 배열을 얻음
+  2. 1에서 만든 배열에 map 등의 배열 전용 메서드를 적용함
+  3. 2에서 반환된 배열에 `Object.fromEntries(array)`를 적용해 배열을 다시 객체로 되돌림
+
+- 이 방법을 사용해 가격 정보가 저장된 객체 prices의 프로퍼티 값을 두 배로 늘려보자
+
+  ```javascript
+  let prices = {
+    banana: 1,
+    orange: 2,
+    meat: 4,
+  };
+
+  let doublePrices = Object.fromEntries(
+    // 객체를 배열로 변환해서 배열 전용 메서드인 map을 적용하고 fromEntries를 사용해 배열을 다시 객체로 되돌립니다.
+    Object.entries(prices).map(([key, value]) => [key, value * 2])
+  );
+
+  alert(doublePrices.meat); // 8
+  ```
