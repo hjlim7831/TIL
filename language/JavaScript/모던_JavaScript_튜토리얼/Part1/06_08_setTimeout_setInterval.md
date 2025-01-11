@@ -96,3 +96,92 @@
 
 - 스케줄링에 관한 명세는 따로 없어서 호스트 환경마다 약간의 차이가 있을 수밖에 없음
 - 브라우저는 HTML5의 timers section을 준수하고 있음
+
+### 2. setInterval
+
+- `setTimeout`과 동일한 문법을 사용
+- 문법
+  ```javascript
+  let timerId = setInterval(func|code, [delay], [arg1], [arg2], ...)
+  ```
+- 인수 역시 동일
+- `setTimeout`과 달리, 함수를 주기적으로 실행함
+- 함수 호출을 중단하려면 `clearInterval(timerId)`를 사용하면 됨
+- 다음 예시를 실행하면 메시지가 2초 간격으로 보이다가 5초 이후에는 더 이상 메시지가 보이지 않음
+
+  ```javascript
+  // 2초 간격으로 메시지를 보여줌
+  let timerId = setInterval(() => alert("째깍"), 2000);
+
+  // 5초 후에 정지
+  setTimeout(() => {
+    clearInterval(timerId);
+    alert("정지");
+  }, 5000);
+  ```
+
+- NOTE : `alert` 창이 떠 있더라도 타이머는 멈추지 않음
+  - 위 예시를 실행한 후 첫 번째 alert 창이 떴을 때 몇 초간 기다렸다가 창을 닫으면, 두 번째 alert 창이 바로 나타나는 것을 보고 이를 확인할 수 있음
+
+### 3. 중첩 setTimeout
+
+- 예시
+
+  ```javascript
+  /** setInterval을 이용하지 않고 아래와 같이 중첩 setTimeout을 사용함
+  let timerId = setInterval(() => alert('째깍'), 2000);
+  */
+
+  let timerId = setTimeout(function tick() {
+    alert("째깍");
+    timerId = setTimeout(tick, 2000); // (*)
+  }, 2000);
+  ```
+
+  - (\*) 줄의 실행이 종료되면, 다음 호출을 스케줄링함
+
+- 중첩 setTimeout을 이용한 방법은 setInterval을 사용하는 방법보다 유연함
+- 호출 결과에 따라 다음 호출을 원하는 방식으로 조정해 스케줄링 할 수 있기 때문
+- 5초 간격으로 서버에 요청을 보내 데이터를 얻는다고 가정해보자
+- 서버가 과부하 상태라면 요청 간격을 10초, 20초, 40초 등으로 증가시켜주는 게 좋을 것
+- 예시 의사코드
+
+  ```javascript
+  let delay = 5000;
+
+  let timerId = setTimeout(function request() {
+    ...요청 보내기...
+
+    if (서버 과부하로 인한 요청 실패) {
+      // 요청 간격을 늘립니다.
+      delay *= 2;
+    }
+
+    timerId = setTimeout(request, delay);
+
+  }, delay);
+  ```
+
+- CPU 소모가 많은 작업을 주기적으로 실행하는 경우에도 `setTimeout`을 재귀 실행하는 방법이 유용함
+- 작업에 걸리는 시간에 따라 다음 작업을 유동적으로 계획할 수 있기 때문
+- 중첩 `setTimeout`을 이용하는 방법은 지연 간격을 보장하지만, `setInterval`은 이를 보장하지 않음
+
+  - setInterval : func를 실행하는 데 '소모되는'시간도 지연 간격에 포함시킴
+  - func를 실행하는 데 걸리는 시간이 명시한 지연 간격보다 길 경우라면?  
+    -> 엔진이 func의 실행이 종료될 때까지 기다려줌
+  - func의 실행이 종료되면 엔진은 스케줄러를 확인하고, 지연 시간이 지났으면 다음 호출을 바로 시작함
+  - 따라서 함수 호출에 걸리는 시간이 매번 delay 밀리초보다 길면, 모든 함수가 쉼 없이 계속 연속 호출됨
+
+- NOTE : 가비지 컬렉션과 setInterval/setTimeout
+  - setInterval이나 setTimeout에 함수를 넘기면, 함수에 대한 내부 참조가 새롭게 만들어지고 이 참조 정보는 스케줄러에 저장됨
+  - 해당 함수를 참조하는 것이 없어도 setInterval과 setTimeout에 넘긴 함수는 가비지 컬렉션의 대상이 되지 않음
+  ```javascript
+  // 스케줄러가 함수를 호출할 때까지 함수는 메모리에 유지됨
+  setTimeout(function() {...}, 100);
+  ```
+  - `setInterval`의 경우, `clearInterval`이 호출되기 전까지 함수에 대한 참조가 메모리에 유지됨
+  - 그런데 이런 동작 방식에는 부작용이 하나 있음
+  - 외부 렉시컬 환경을 참조하는 함수가 있다고 가정해 보자
+  - 이 함수가 메모리에 남아있는 동안엔 외부 변수 역시 메모리에 남아있기 마련임
+  - 그런데 이렇게 되면 실제 함수가 차지했어야 하는 공간보다 더 많은 메모리 공간이 사용됨
+  - 이런 부작용을 방지하고 싶다면, 스케줄링할 필요가 없어진 함수는 아무리 작더라도 취소하자
