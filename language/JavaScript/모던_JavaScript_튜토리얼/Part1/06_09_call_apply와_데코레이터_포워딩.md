@@ -176,3 +176,8 @@
   1. 데코레이터를 적용한 후에 `worker.slow`는 래퍼 `function(x) {...}`가 됨
   2. `worker.slow(2)`를 실행하면 래퍼는 2를 인수로 받고, `this=worker`가 됨 (점 앞의 객체)
   3. 결과가 캐시되지 않은 상황이라면 `func.call(this, x)`에서 현재 `this(=worker)`와 인수(`=2`)를 원본 메서드에 전달함
+
+### 3. 여러 인수 전달하기
+
+- `cachingDecorator`를 좀 더 다채롭게 해보자
+- 지금 상태론 인수가 하나뿐인 함수에만 `cachingDecorator`를 적용할 수 있음
