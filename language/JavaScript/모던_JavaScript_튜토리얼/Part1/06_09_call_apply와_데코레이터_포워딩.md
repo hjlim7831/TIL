@@ -181,3 +181,73 @@
 
 - `cachingDecorator`를 좀 더 다채롭게 해보자
 - 지금 상태론 인수가 하나뿐인 함수에만 `cachingDecorator`를 적용할 수 있음
+- 복수 인수를 가진 메서드, `worker.slow`를 캐싱하려면 어떻게 해야 할지 생각해보자
+
+  ```javascript
+  let worker = {
+    slow(min, max) {
+      return min + max; // CPU를 아주 많이 쓰는 작업이라 가정
+    },
+  };
+  // 동일한 인수를 전달했을 때 호출 결과를 기억할 수 있어야 함
+  worker.slow = cachingDecorator(worker);
+  ```
+
+- 지금까진 인수가 `x` 하나뿐이었기 때문에 `cache.set(x, result)`으로 결과를 저장하고 `cache.get(x)`으로 저장된 결과를 불러오기만 하면 됐음
+- 그런데 이제부턴 `(min, max)` 같이 인수가 여러 개이고, 이 인수들을 넘겨 호출한 결과를 기억해야 함
+
+  - 네이티브 맵은 단일 키만 받음
+
+- 해결 방법
+
+  1. 복수 키를 지원하는 맵과 유사한 자료 구조 구현하기(서드 파티 라이브러리 등을 사용해도 됨)
+  2. 중첩 맵 사용하기 `(max, result)` 쌍 저장은 `cache.set(min)`으로, `result`는 `cache.get(min).get(max)`을 사용해 얻음
+  3. 두 값을 하나로 합치기. 맵의 키로 문자열 `"min,max"`를 사용
+
+  - 여러 값을 하나로 합치는 코드는 해싱 함수(hashing function)에 구현해 유연성을 높임
+
+- 세 번째 방법만으로 충분하기에, 이 방법을 사용해 코드를 수정해 볼 것
+- 여기에 더해 `func.call(this, x)`를 `func.call(this, ...arguments)`로 교체해, 래퍼 함수로 감싼 함수가 호출될 때 복수 인수 넘길 수 있도록 할 것
+- 더 강력해진 cachingDecorator를 살펴보자
+
+  ```javascript
+  let worker = {
+    slow(min, max) {
+      alert(`slow(${min},${max})을/를 호출함`);
+      return min + max;
+    },
+  };
+
+  function cachingDecorator(func, hash) {
+    let cache = new Map();
+    return function () {
+      let key = hash(arguments); // (*)
+      if (cache.has(key)) {
+        return cache.get(key);
+      }
+
+      let result = func.call(this, ...arguments); // (**)
+
+      cache.set(key, result);
+      return result;
+    };
+  }
+
+  function hash(args) {
+    return args[0] + "," + args[1];
+  }
+
+  worker.slow = cachingDecorator(worker.slow, hash);
+
+  alert(worker.slow(3, 5)); // 제대로 동작합니다.
+  alert("다시 호출: " + worker.slow(3, 5)); // 동일한 결과 출력(캐시된 결과)
+  ```
+
+- 이제 인수의 개수에 관계없이 래퍼가 잘 동작함
+- 해시 함수가 복수의 인수를 자유자재로 처리할 수 있도록 수정을 해야 하긴 함
+- 이를 가능하게 해주는 흥미로운 방법은 아래에서 소개할 것
+
+- 개선 후, 바뀐 것은 두 가지
+  - `(*)`로 표시한 줄에서 `hash`가 호출되면서 `arguments`를 사용한 단일 키가 만들어짐
+    - 여기선 간단한 '결합'함수로 인수 `(3, 5)`를 키 `"3,5"`로 바꿨는데, 좀 더 복잡한 경우라면 또 다른 해싱 함수가 필요할 수 있음
+    - `(**)`로 표시한 줄에선 `func.call(this, ...arguments)`를 사용해 컨텍스트(`this`)와 래퍼가 가진 인수 전부(`...arguments`)를 기존 함수에 전달함
