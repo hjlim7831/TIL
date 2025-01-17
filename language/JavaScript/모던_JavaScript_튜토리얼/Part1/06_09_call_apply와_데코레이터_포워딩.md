@@ -251,3 +251,8 @@
   - `(*)`로 표시한 줄에서 `hash`가 호출되면서 `arguments`를 사용한 단일 키가 만들어짐
     - 여기선 간단한 '결합'함수로 인수 `(3, 5)`를 키 `"3,5"`로 바꿨는데, 좀 더 복잡한 경우라면 또 다른 해싱 함수가 필요할 수 있음
     - `(**)`로 표시한 줄에선 `func.call(this, ...arguments)`를 사용해 컨텍스트(`this`)와 래퍼가 가진 인수 전부(`...arguments`)를 기존 함수에 전달함
+
+
+### 4. func.apply
+
+- 여기서 `func.call(this, ...arguments)` 대신, `func.apply(this, arguments)`를 사용해도 됨
