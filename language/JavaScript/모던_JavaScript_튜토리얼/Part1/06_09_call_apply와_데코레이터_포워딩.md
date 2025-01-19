@@ -256,3 +256,7 @@
 ### 4. func.apply
 
 - 여기서 `func.call(this, ...arguments)` 대신, `func.apply(this, arguments)`를 사용해도 됨
+- 내장 메서드 `func.apply`의 문법
+    ```
+    func.apply(context, args)
+    ```
