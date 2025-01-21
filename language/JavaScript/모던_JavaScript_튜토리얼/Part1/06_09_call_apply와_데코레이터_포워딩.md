@@ -252,11 +252,41 @@
     - 여기선 간단한 '결합'함수로 인수 `(3, 5)`를 키 `"3,5"`로 바꿨는데, 좀 더 복잡한 경우라면 또 다른 해싱 함수가 필요할 수 있음
     - `(**)`로 표시한 줄에선 `func.call(this, ...arguments)`를 사용해 컨텍스트(`this`)와 래퍼가 가진 인수 전부(`...arguments`)를 기존 함수에 전달함
 
-
 ### 4. func.apply
 
 - 여기서 `func.call(this, ...arguments)` 대신, `func.apply(this, arguments)`를 사용해도 됨
 - 내장 메서드 `func.apply`의 문법
-    ```
-    func.apply(context, args)
-    ```
+
+  ```javascript
+  func.apply(context, args);
+  ```
+
+- apply는 func의 this를 context로 고정해주고, 유사 배열 객체인 args를 인수로 사용할 수 있게 해줌
+- call과 apply의 문법적 차이는 call이 복수 인수를 따로따로 받는 대신 apply는 인수를 유사 배열 객체로 받는다는 점 뿐
+- 따라서 아래 코드 두 줄은 거의 같은 역할을 함
+
+  ```javascript
+  func.call(context, ...args);
+  func.apply(context, args);
+  ```
+
+- 차이점
+
+  - 전개 구문 `...`은 이터러블 `args`을 분해해 `call`에 전달할 수 있게 해줌
+  - `apply`는 오직 유사 배열 형태의 `args`만 받음
+
+- 이 차이만 빼면 두 메서드는 완전히 동일하게 동작함
+- 인수가 이터러블 형태라면 `call`을, 유사 배열 형태라면 `apply`를 사용하면 됨
+
+- 배열같이 이터러블이면서 유사 배열인 객체엔 둘 다를 사용할 수 있는데, 대부분의 자바스크립트 엔진은 내부에서 `apply`를 최적화하기 때문에 `apply`를 사용하는 게 좀 더 빠르긴 함
+
+- 이렇게 컨텍스트와 함께 인수 전체를 다른 함수에 전달하는 것을 `콜 포워딩(call forwarding)`이라 함
+- 가장 간단한 형태의 콜 포워딩
+
+  ```javascript
+  let wrapper = function () {
+    return func.apply(this, arguments);
+  };
+  ```
+
+- 이런 식으로 외부에서 `wrapper`를 호출하면, 기존 함수인 `func`를 호출하는 것과 명확하게 구분할 수 없음
