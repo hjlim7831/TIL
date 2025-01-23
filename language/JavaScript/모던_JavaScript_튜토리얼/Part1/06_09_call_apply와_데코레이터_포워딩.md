@@ -290,3 +290,48 @@
   ```
 
 - 이런 식으로 외부에서 `wrapper`를 호출하면, 기존 함수인 `func`를 호출하는 것과 명확하게 구분할 수 없음
+
+### 5. 메서드 빌리기
+
+- 위에서 구현한 해싱 함수를 개선해봅시다
+
+  ```javascript
+  function hash(args) {
+    return args[0] + "," + args[1];
+  }
+  ```
+
+- 지금 상태에선 인수 두 개만 다룰 수 있음
+- args의 요소 개수에 상관없이 요소들을 합칠 수 있으면 더 좋을 듯
+
+- 가장 자연스러운 해결책 : arr.join을 사용하는 것
+
+  ```javascript
+  function hash(args) {
+    return args.join();
+  }
+  ```
+
+- 아쉽게도 이 방법은 동작하지 않음
+
+  - `hash(arguments)`를 호출할 때 인수로 넘겨주는 `arguments`는 진짜 배열이 아니고, 이터러블 객체나 유사 배열 객체이기 때문
+
+- 배열이 아닌 것에 `join`을 호출하면 에러가 발생함
+
+  ```javascript
+  function hash() {
+    alert(arguments.join()); // Error: arguments.join is not a function
+  }
+
+  hash(1, 2);
+  ```
+
+- 아래와 같은 방법을 사용하면 배열 메서드 join을 사용할 수 있음
+
+  ```javascript
+  function hash() {
+    alert([].join.call(arguments)); // 1, 2
+  }
+
+  hash(1, 2);
+  ```
